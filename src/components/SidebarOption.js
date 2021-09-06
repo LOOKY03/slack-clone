@@ -28,6 +28,12 @@ function SidebarOption({ Icon, title, addChannelOption, id }) {
     }
   };
 
+  const deleteChannel = () => {
+    if (id) {
+      db.collection("rooms").doc(id).delete();
+    }
+  };
+
   return (
     <SidebarOptionContainer
       onClick={addChannelOption ? addChannel : selectChannel}
@@ -37,7 +43,7 @@ function SidebarOption({ Icon, title, addChannelOption, id }) {
         <h3>{title}</h3>
       ) : (
         <SidebarOptionChannel>
-          <span>#{title}</span>
+          <span>#{title}</span> <button onClick={deleteChannel}>del</button>
         </SidebarOptionChannel>
       )}
     </SidebarOptionContainer>

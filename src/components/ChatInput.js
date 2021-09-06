@@ -3,8 +3,11 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import firebase from 'firebase'
 import { db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../firebase";
 
 function ChatInput({ channelName, channelId, chatRef }) {
+  const [user] = useAuthState(auth)
   const [input, setInput] = useState('')
 
   const sendMessage = (e) => {
@@ -15,14 +18,17 @@ function ChatInput({ channelName, channelId, chatRef }) {
       return false;
       
     }
+    if (input === "") {
+      return false
+    }
 
     // console.log(input)
 
     db.collection("rooms").doc(channelId).collection("messages").add({
       message: input,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      user: 'Arvin Vaje',
-      userImage: "https://static.toiimg.com/thumb/resizemode-4,msid-76729750,imgsize-249247,width-720/76729750.jpg"
+      user: user.displayName,
+      userImage: user.photoURL,
 
     });
     
